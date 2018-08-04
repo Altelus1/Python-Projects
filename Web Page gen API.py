@@ -76,8 +76,8 @@ class List(Component):
 		ret_string = ""
 		for item in self.items:
 			ret_string += "<{}>{}</{}>".format(self.tag_name,
-									   item.extract(),
-									   self.tag_name)
+							item.extract(),
+							self.tag_name)
 		return ret_string
 			
 class Item(Component):
