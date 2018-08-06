@@ -1,5 +1,42 @@
 
+"""
+Added Player class, added win checker, no documentation yet.
+"""
 
+class Player:
+	
+	def __init__(self, player_symbol):
+		self.player_symbol = player_symbol
+		self.positions = []
+	
+	def append_positions(self, posx, posy):
+		for index in range(len(self.positions)):
+			if posy <= self.positions[index][1] and posx <= self.positions[index][0]:
+				self.positions.insert(index,[posx,posy])
+				return
+		self.positions.append([posx,posy])
+		
+	def get_symbol(self):
+		return self.player_symbol
+	
+	def get_positions(self):
+		return self.positions
+	
+	def check_win(self):
+		global n_max
+		direction = [[1,-1],[1,0],[1,1],[0,1]]
+		for coord in self.positions:
+			for path in direction:	
+				for count in range(1,n_max):
+					offset_x = path[0]*count
+					offset_y = path[1]*count
+					if [coord[0]+offset_x, coord[1]+offset_y] not in self.positions:
+						break
+					if count+1 == n_max:
+						return True
+		return False
+					
+					
 def setup_empty_board():
 	global b_dimension
 	global board
@@ -19,20 +56,20 @@ def print_board():
 					print(PARTS[part],end = "")
 			print("")
 
-def get_player_coord(player_symbol):
+def get_player_coord(player):
 	global board
 	str_coord = input("Format 'x y' : ")
 	coord = str_coord.split(" ")
-	board[int(coord[1])-1][int(coord[0])-1] = player_symbol
+	board[int(coord[1])-1][int(coord[0])-1] = player.get_symbol()
+	player.append_positions(int(coord[0]),int(coord[1]))
 	print_board()
-
-def check_pattern()
-		global board
 			
 print("Welcome to Complete the N Game")
 
-player1 = input("Enter Player 1 symbol: ")
-player2 = input("Enter Player 2 symbol: ")
+player1_symbol = input("Enter Player 1 symbol: ")
+player1 = Player(player1_symbol)
+player2_symbol = input("Enter Player 2 symbol: ")
+player2 = Player(player2_symbol)
 
 MIN_BOX_DIM = 7
 MAX_BOX_DIM = 10
@@ -67,7 +104,15 @@ print_board()
 
 while True:
 		get_player_coord(player1)
+		print("Player1 positions: {}".format(player1.get_positions()))
+		if(player1.check_win()):
+			print("Player 1 wins")
+			break
 		get_player_coord(player2)
+		print("Player2 positions: {}".format(player2.get_positions()))
+		if(player2.check_win()):
+			print("Player 2 wins")
+			break
 
 
 
